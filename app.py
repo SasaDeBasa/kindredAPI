@@ -1,5 +1,11 @@
 from flask import Flask, request, jsonify
 import joblib
+import os
+
+print("Current working directory:", os.getcwd())
+print("Files in working directory:", os.listdir("."))
+
+model = joblib.load('depression_model.pkl')
 
 app = Flask(__name__)
 
@@ -9,7 +15,6 @@ def health():
     return "Mental Health Model is running!", 200
 
 # Load model
-model = joblib.load('depression_model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
