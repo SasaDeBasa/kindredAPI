@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 import joblib
 
 app = Flask(__name__)
+@app.route('/')
+def health():
+    return "OK", 200
+
 
 # Load model
 model = joblib.load('depression_model.pkl')
