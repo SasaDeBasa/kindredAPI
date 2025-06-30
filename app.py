@@ -2,10 +2,11 @@ from flask import Flask, request, jsonify
 import joblib
 
 app = Flask(__name__)
+
+# Health check for Railway
 @app.route('/')
 def health():
-    return "OK", 200
-
+    return "Mental Health Model is running!", 200
 
 # Load model
 model = joblib.load('depression_model.pkl')
@@ -16,10 +17,6 @@ def predict():
     features = data['features']
     prediction = model.predict([features])
     return jsonify({'prediction': prediction[0]})
-
-@app.route('/')
-def home():
-    return "Mental Health Model is running!"
 
 if __name__ == '__main__':
     app.run()
