@@ -1,9 +1,5 @@
 from flask import Flask, request, jsonify
 import joblib
-import os
-
-print("Current working directory:", os.getcwd())
-print("Files in working directory:", os.listdir("."))
 
 model = joblib.load('depression_model.pkl')
 
@@ -18,10 +14,25 @@ def health():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.get_json()
-    features = data['features']
-    prediction = model.predict([features])
-    return jsonify({'prediction': prediction[0]})
+    try:
+        data = request.get_json()
+        print("Received data:", data)
+
+        features = data.get('features')
+        print("Features:", features)
+
+        if features is None:
+            return jsonify({'error': 'Missing "features" in request body'}), 400
+
+        prediction = model.predict([features])
+        print("Prediction:", prediction)
+
+        return jsonify({'prediction': prediction[0]})
+
+    except Exception as e:
+        print("Error during prediction:", str(e))
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run()
